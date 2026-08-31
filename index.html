@@ -287,7 +287,7 @@ function verifyPassword() {
   let val = document.getElementById('passInput').value;
   if(val === MASTER_PASSWORD) {
     document.getElementById('authScreen').style.display = 'none';
-    sessionStorage.tgxAuth = "true";
+    localStorage.setItem('tgxAuth', 'true');
   } else {
     alert('Incorrect Password! Try again.');
     document.getElementById('passInput').value = '';
@@ -295,7 +295,7 @@ function verifyPassword() {
 }
 
 window.onload = function() {
-  if(sessionStorage.tgxAuth === "true") {
+  if(localStorage.getItem('tgxAuth') === "true") {
     document.getElementById('authScreen').style.display = 'none';
   }
 };
@@ -607,7 +607,6 @@ function quickLogMetaCall(id) {
   l.calls = (l.calls || 0) + 1;
   l.lastCalled = nowStr;
 
-  // Automated Step-by-Step Workflow Progression
   if(l.status === 'New') {
     l.status = 'Contacted';
   }
@@ -845,22 +844,28 @@ function render() {
 
 render();
   <script type="module">
+  // Import the functions you need from the SDKs you need
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
-  import { getFirestore } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
 
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
   const firebaseConfig = {
     apiKey: "AIzaSyAZKGifYNaPrKXb-wMg_vNvpLi3BoDueVQ",
     authDomain: "thegstxpresscrm.firebaseapp.com",
     projectId: "thegstxpresscrm",
     storageBucket: "thegstxpresscrm.firebasestorage.app",
     messagingSenderId: "1049995780326",
-    appId: "1:104995780326:web:f53ec6a94b839c2424db27",
+    appId: "1:1049995780326:web:f53ec6a94b839c2424db27",
     measurementId: "G-8Y77LVVRFD"
   };
 
+  // Initialize Firebase
   const app = initializeApp(firebaseConfig);
-  window.db = getFirestore(app);
-  console.log("Firebase Database Connected!");
+  const analytics = getAnalytics(app);
+</script>
 </script>
 </body>
 </html>
