@@ -1,0 +1,849 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Thegstxpress CRM by Rupam</title>
+<style>
+:root{
+  --primary:#0f172a;
+  --accent:#6366f1;
+  --accent-gradient:linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+  --meta-gradient:linear-gradient(135deg, #1877f2 0%, #0052cc 100%);
+  --bg:#090d16;
+  --card-bg:#111827;
+  --text:#f3f4f6;
+  --text-muted:#9ca3af;
+  --border:#1f2937;
+  --hover:#1e293b;
+}
+body{font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;margin:0;background:var(--bg);color:var(--text)}
+header{background:linear-gradient(135deg, #090d16 0%, #1e1b4b 100%);color:#fff;padding:22px 30px;font-size:24px;font-weight:700;box-shadow:0 10px 25px rgba(0,0,0,0.5);display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border)}
+header span{font-size:13px;background:rgba(99,102,241,0.2);color:#818cf8;border:1px solid rgba(99,102,241,0.4);padding:5px 12px;border-radius:20px;font-weight:600}
+nav{padding:14px 30px;background:#0d1322;display:flex;gap:10px;box-shadow:0 4px 20px rgba(0,0,0,0.3);overflow-x:auto;border-bottom:1px solid var(--border)}
+button{padding:10px 18px;border:0;border-radius:10px;cursor:pointer;background:#162032;font-weight:600;color:var(--text-muted);transition:all 0.3s ease;white-space:nowrap}
+button:hover{background:var(--hover);color:#fff}
+button.active{background:var(--accent-gradient);color:#fff;box-shadow:0 4px 15px rgba(99,102,241,0.4)}
+main{padding:25px;max-width:1450px;margin:auto}
+.cards{display:grid;grid-template-columns:repeat(auto-fit, minmax(160px, 1fr));gap:15px;margin-bottom:20px}
+.card{background:var(--card-bg);padding:20px;border-radius:16px;box-shadow:0 8px 25px rgba(0,0,0,0.3);border:1px solid var(--border);transition:transform 0.2s ease}
+.card:hover{transform:translateY(-3px);border-color:#374151}
+.card b{display:block;font-size:26px;margin-top:6px;color:#fff}
+.panel{background:var(--card-bg);padding:25px;border-radius:16px;margin-top:20px;box-shadow:0 8px 25px rgba(0,0,0,0.3);border:1px solid var(--border);overflow:auto}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}
+.field{display:flex;flex-direction:column;gap:6px}
+label{font-size:13px;font-weight:600;color:var(--text-muted)}
+input,select,textarea{padding:11px;border:1px solid var(--border);border-radius:10px;font-size:14px;outline:none;background:#090d16;color:var(--text)}
+input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(99,102,241,0.2)}
+.checkbox-group{display:flex;flex-direction:column;gap:6px;max-height:140px;overflow-y:auto;border:1px solid var(--border);padding:10px;border-radius:10px;background:#090d16}
+.checkbox-group label{font-weight:normal;display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;color:var(--text-muted)}
+.checkbox-group input{width:16px;height:16px;cursor:pointer}
+table{width:100%;border-collapse:collapse;min-width:1150px}
+th,td{padding:12px 14px;border-bottom:1px solid var(--border);text-align:left;font-size:13px}
+th{background:#162032;color:var(--text);font-weight:700}
+tr:hover td{background:rgba(255,255,255,0.015)}
+.hide{display:none}
+.primary{background:var(--accent-gradient);color:#fff;box-shadow:0 4px 15px rgba(99,102,241,0.4)}
+.primary:hover{opacity:0.9}
+.wa-btn{background:#059669;color:white;padding:5px 10px;border-radius:8px;text-decoration:none;font-size:12px;font-weight:600;display:inline-flex;align-items:center;gap:4px}
+.wa-btn:hover{background:#047857}
+.call-btn{background:#2563eb;color:white;padding:5px 10px;border-radius:8px;text-decoration:none;font-size:12px;font-weight:600;display:inline-flex;align-items:center;gap:4px}
+.call-btn:hover{background:#1d4ed8}
+.stage-select{padding:6px 10px;border-radius:8px;border:1px solid var(--border);font-size:12px;font-weight:600;background:#090d16;color:var(--text);cursor:pointer}
+.badge{background:rgba(99,102,241,0.15);color:#818cf8;border:1px solid rgba(99,102,241,0.3);padding:4px 10px;border-radius:6px;font-weight:600}
+.meta-badge{background:rgba(24,119,242,0.2);color:#60a5fa;border:1px solid rgba(24,119,242,0.4);padding:4px 10px;border-radius:6px;font-weight:600}
+.action-btn-group{display:flex;gap:6px}
+.edit-btn{background:rgba(14,165,233,0.15);color:#38bdf8;border:1px solid rgba(14,165,233,0.3);padding:5px 10px;border-radius:6px;cursor:pointer;font-weight:600;font-size:12px}
+.edit-btn:hover{background:rgba(14,165,233,0.25)}
+.del-btn{background:rgba(239,68,68,0.15);color:#f87171;border:1px solid rgba(239,68,68,0.3);padding:5px 10px;border-radius:6px;cursor:pointer;font-weight:600;font-size:12px}
+.del-btn:hover{background:rgba(239,68,68,0.25)}
+h2, h3 {color:#fff;}
+
+/* LOGIN SCREEN STYLES */
+#authScreen {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: var(--bg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+.auth-box {
+  background: var(--card-bg);
+  padding: 40px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+  width: 100%;
+  max-width: 380px;
+  text-align: center;
+}
+.auth-box h2 { margin-top: 0; color: #fff; margin-bottom: 8px; }
+.auth-box p { color: var(--text-muted); font-size: 13px; margin-bottom: 24px; }
+.auth-box input { width: 100%; box-sizing: border-box; text-align: center; font-size: 18px; letter-spacing: 3px; margin-bottom: 20px; }
+.auth-box button { width: 100%; padding: 12px; font-size: 16px; }
+</style>
+</head>
+<body>
+
+<div id="authScreen">
+  <div class="auth-box">
+    <h2>THEGSTXPRESS CRM</h2>
+    <p>Enter Master Password to Access</p>
+    <input type="password" id="passInput" placeholder="••••" onkeydown="if(event.key==='Enter') verifyPassword()">
+    <button class="primary" onclick="verifyPassword()">Unlock CRM</button>
+  </div>
+</div>
+
+<header>
+  THEGSTXPRESS CRM <span>By Rupam</span>
+</header>
+<nav>
+  <button class="active" onclick="tab('dash',this)">Dashboard</button>
+  <button onclick="tab('metaLeads',this)" style="background:var(--meta-gradient);color:white;">Meta Leads 📲</button>
+  <button onclick="tab('leads',this)">Leads</button>
+  <button onclick="tab('workAssign',this)" style="background:linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);color:white;">Work Assignment 🗂️</button>
+  <button onclick="tab('calls',this)">Call History & Audit</button>
+  <button onclick="tab('follow',this)">Follow-ups</button>
+  <button onclick="tab('perf',this)">Performance</button>
+  <button onclick="tab('callerPortal',this)" style="background:linear-gradient(135deg, #059669 0%, #10b981 100%);color:white;">Caller Portal 📞</button>
+  <button onclick="tab('manageCallers',this)" style="background:#334155;color:white;">Manage Team 👥</button>
+</nav>
+<main>
+
+<section id="dash">
+  <h2>Dashboard Overview</h2>
+  <div class="cards" id="cards"></div>
+  <div class="panel">
+    <h3>Monthly Revenue Overview</h3>
+    <div id="monthlyRevenueTable"></div>
+  </div>
+  <div class="panel">
+    <h3>Recent Leads & Assignments</h3>
+    <div id="recent"></div>
+  </div>
+</section>
+
+<section id="metaLeads" class="hide">
+  <h2>Meta Ads Leads - Direct Call & Employee Activity Tracker 📲</h2>
+  <div class="panel" style="background:#0b1528; border:1px solid #1d4ed8;">
+    <p style="color:#93c5fd; margin-top:0; font-size:13px;">
+      <b>Workflow Progression:</b> Direct dial options move leads from <b>New ➔ Contacted</b> automatically when logged. Every call is time-stamped with the employee's name for direct verification.
+    </p>
+    <div class="grid">
+      <div class="field"><label>Filter by Caller</label><select id="metaCallerFilter" onchange="renderMetaLeads()"></select></div>
+      <div class="field"><label>Filter by Workflow Stage</label><select id="metaStageFilter" onchange="renderMetaLeads()"><option value="All">All Stages</option><option value="New">New (Uncalled)</option><option value="Contacted">Contacted</option><option value="Interested">Interested</option><option value="Follow-up">Follow-up</option></select></div>
+      <div class="field" style="grid-column: span 2;"><label>Search Lead</label><input id="metaSearch" placeholder="Search Meta lead name or phone..." oninput="renderMetaLeads()"></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>Meta Leads Calling Action Table</h3>
+    <div id="metaLeadsTable"></div>
+  </div>
+</section>
+
+<section id="leads" class="hide">
+  <h2>Lead Management & Assignment</h2>
+  <div class="panel">
+    <input type="hidden" id="editLeadId">
+    <h3 id="formTitle" style="margin-top:0; color:#818cf8;">Add New Lead</h3>
+    <div class="grid">
+      <div class="field"><label>Name</label><input id="n"></div>
+      <div class="field"><label>Phone</label><input id="ph"></div>
+      <div class="field"><label>City</label><input id="city"></div>
+      <div class="field"><label>Source</label><select id="src"><option>Meta Ads</option><option>WhatsApp</option><option>Website</option><option>Referral</option></select></div>
+      
+      <div class="field" style="grid-column: span 2;">
+        <label>Select Services (Multiple Choice)</label>
+        <div class="checkbox-group" id="serviceGroup">
+          <label><input type="checkbox" value="Amazon + Flipkart + Meesho Seller Setup"> Amazon + Flipkart + Meesho Seller Setup</label>
+          <label><input type="checkbox" value="Amazon Seller Setup"> Amazon Seller Setup</label>
+          <label><input type="checkbox" value="Flipkart Seller Setup"> Flipkart Seller Setup</label>
+          <label><input type="checkbox" value="Meesho Seller Setup"> Meesho Seller Setup</label>
+          <label><input type="checkbox" value="GST Registration"> GST Registration</label>
+          <label><input type="checkbox" value="APOB Application"> APOB Application</label>
+          <label><input type="checkbox" value="Website Development"> Website Development</label>
+        </div>
+      </div>
+
+      <div class="field"><label>Assign Caller / Executive</label><select id="callerSel"></select></div>
+      <div class="field"><label>Initial Status</label><select id="st"><option>New</option><option>Contacted</option><option>Interested</option><option>Follow-up</option><option>Negotiation</option><option>Converted</option><option>Not Interested</option><option>No Response</option></select></div>
+      <div class="field"><label>Priority</label><select id="pri"><option>Hot</option><option>Warm</option><option>Cold</option></select></div>
+      <div class="field"><label>Follow-up Date</label><input id="fu" type="date"></div>
+      <div class="field"><label>Quoted Amount (₹)</label><input id="amt" type="number"></div>
+      <div class="field" style="grid-column: span 2;"><label>Notes</label><textarea id="notes" rows="2"></textarea></div>
+    </div>
+    <br>
+    <div style="display:flex; gap:10px;">
+      <button class="primary" id="saveLeadBtn" onclick="saveLeadAction()">Add Lead</button>
+      <button id="cancelEditBtn" class="hide" onclick="resetLeadForm()" style="background:#1f2937; color:#9ca3af;">Cancel Edit</button>
+    </div>
+  </div>
+  <div class="panel">
+    <input id="q" placeholder="Search by name, phone, city or assigned caller..." oninput="renderLeads()" style="width:100%;max-width:400px"><br><br>
+    <div id="lt"></div>
+  </div>
+</section>
+
+<section id="workAssign" class="hide">
+  <h2>Task & Work Assignment Dashboard</h2>
+  <div class="panel" style="background:#14112e; border:1px solid #3b2874;">
+    <h3>Assign Specific Tasks to Team Members</h3>
+    <div class="grid">
+      <div class="field"><label>Select Client / Lead</label><select id="taskLeadSel"></select></div>
+      <div class="field"><label>Assign To (Team Member)</label><select id="taskMemberSel"></select></div>
+      <div class="field"><label>Task Status</label><select id="taskStatus"><option>Pending</option><option>In Progress</option><option>Completed</option><option>On Hold</option></select></div>
+      <div class="field"><label>Deadline Date</label><input id="taskDeadline" type="date"></div>
+      
+      <div class="field" style="grid-column: span 2;">
+        <label>Select Tasks (Multiple Selection)</label>
+        <div class="checkbox-group" id="taskTypeGroup"></div>
+      </div>
+      
+      <div class="field" style="grid-column: span 2;">
+        <label>Add New Custom Task Type to List</label>
+        <div style="display:flex; gap:10px;">
+          <input id="customTaskInput" placeholder="e.g., Brand Registry, Trademark...">
+          <button type="button" onclick="addNewTaskType()" style="background:linear-gradient(135deg, #7c3aed 0%, #a855f7 100%); color:white; border:0; padding:8px 14px; border-radius:8px; cursor:pointer;">Add Task Type</button>
+        </div>
+      </div>
+
+      <div class="field" style="grid-column: span 2;"><label>Task Instructions / Notes</label><textarea id="taskNotes" rows="2" placeholder="Provide specific details for the task..."></textarea></div>
+    </div>
+    <br><button class="primary" style="background:linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);" onclick="saveTaskAssignment()">Assign Task(s)</button>
+  </div>
+
+  <div class="panel">
+    <h3>Active Work & Task List</h3>
+    <div id="taskListTable"></div>
+  </div>
+</section>
+
+<section id="calls" class="hide">
+  <h2>Call History & Activity Audit Log</h2>
+  <div class="panel">
+    <h3>Log Employee Call Update</h3>
+    <div class="grid">
+      <div class="field"><label>Lead ID</label><input id="lid" placeholder="e.g. TGX-0001"></div>
+      <div class="field"><label>Caller / Employee Name</label><select id="ccSel"></select></div>
+      <div class="field"><label>Call Outcome</label><select id="out"><option>Connected - Interested</option><option>Connected - Not Interested</option><option>Call Back Later</option><option>No Answer</option><option>Busy</option><option>Wrong Number</option><option>WhatsApp Sent</option></select></div>
+      <div class="field"><label>Duration (Minutes)</label><input id="dur" type="number"></div>
+      <div class="field"><label>Next Follow-up</label><input id="nf" type="date"></div>
+      <div class="field" style="grid-column: span 2;"><label>Call Notes & Updates</label><textarea id="cn" rows="2"></textarea></div>
+    </div>
+    <br><button class="primary" onclick="saveCallAdmin()">Save Call Audit Log</button>
+  </div>
+  <div class="panel" id="ct"></div>
+</section>
+
+<section id="follow" class="hide">
+  <h2>Today's / Pending Follow-ups</h2>
+  <div class="panel" id="ft"></div>
+</section>
+
+<section id="perf" class="hide">
+  <h2>Performance Report</h2>
+  <div class="panel" id="pt"></div>
+</section>
+
+<section id="callerPortal" class="hide">
+  <h2>Caller Portal (Dedicated Workspace)</h2>
+  <div class="panel" style="background:#0b2318; border:1px solid #14532d;">
+    <div class="grid">
+      <div class="field"><label>Select Your Name (Caller)</label><select id="portalCaller" onchange="renderCallerLeads()"></select></div>
+      <div class="field"><label>Filter Leads by Status</label><select id="portalFilter" onchange="renderCallerLeads()"><option value="All">All Assigned Leads</option><option value="New">New</option><option value="Follow-up">Follow-up Due</option><option value="Interested">Interested</option></select></div>
+    </div>
+  </div>
+  <div class="panel">
+    <h3>My Assigned Leads & Quick Call Logger</h3>
+    <div id="callerLeadsTable"></div>
+  </div>
+</section>
+
+<section id="manageCallers" class="hide">
+  <h2>Manage Team Members</h2>
+  <div class="panel" style="max-width: 600px;">
+    <div class="field">
+      <label>New Team Member / Caller Name</label>
+      <input id="newCallerName" placeholder="Enter full name...">
+    </div>
+    <br>
+    <button class="primary" onclick="addCaller()">Add Member</button>
+  </div>
+  <div class="panel" style="max-width: 600px;">
+    <h3>Existing Team</h3>
+    <div id="callerListTable"></div>
+  </div>
+</section>
+
+</main>
+
+<script>
+const MASTER_PASSWORD = "1234";
+
+function verifyPassword() {
+  let val = document.getElementById('passInput').value;
+  if(val === MASTER_PASSWORD) {
+    document.getElementById('authScreen').style.display = 'none';
+    sessionStorage.tgxAuth = "true";
+  } else {
+    alert('Incorrect Password! Try again.');
+    document.getElementById('passInput').value = '';
+  }
+}
+
+window.onload = function() {
+  if(sessionStorage.tgxAuth === "true") {
+    document.getElementById('authScreen').style.display = 'none';
+  }
+};
+
+let L = JSON.parse(localStorage.tgxL || '[]');
+let C = JSON.parse(localStorage.tgxC || '[]');
+let Callers = JSON.parse(localStorage.tgxCallers || '["Saheli Deb", "Rupam Jana"]');
+let Tasks = JSON.parse(localStorage.tgxTasks || '[]');
+let AvailableTaskTypes = JSON.parse(localStorage.tgxTaskTypes || '["Seller Account Opening", "Listing", "Image Generation", "GST Registration", "APOB Registration", "Cataloging", "A+ Content Design"]');
+
+const save = () => {
+  localStorage.tgxL = JSON.stringify(L);
+  localStorage.tgxC = JSON.stringify(C);
+  localStorage.tgxCallers = JSON.stringify(Callers);
+  localStorage.tgxTasks = JSON.stringify(Tasks);
+  localStorage.tgxTaskTypes = JSON.stringify(AvailableTaskTypes);
+};
+
+function tab(id, b) {
+  document.querySelectorAll('main>section').forEach(x => x.classList.add('hide'));
+  document.getElementById(id).classList.remove('hide');
+  document.querySelectorAll('nav button').forEach(x => x.classList.remove('active'));
+  if(b) b.classList.add('active');
+  render();
+}
+
+function updateDropdowns() {
+  let opts = Callers.map(c => `<option>${c}</option>`).join('');
+  document.getElementById('callerSel').innerHTML = opts;
+  document.getElementById('ccSel').innerHTML = opts;
+  document.getElementById('portalCaller').innerHTML = opts;
+  document.getElementById('taskMemberSel').innerHTML = opts;
+  if(document.getElementById('metaCallerFilter')) {
+    document.getElementById('metaCallerFilter').innerHTML = '<option value="All">All Callers</option>' + opts;
+  }
+
+  let leadOpts = L.map(l => `<option value="${l.id}">${l.id} - ${l.name} (${l.phone})</option>`).join('');
+  document.getElementById('taskLeadSel').innerHTML = leadOpts || '<option>No leads available</option>';
+
+  let taskContainer = document.getElementById('taskTypeGroup');
+  taskContainer.innerHTML = AvailableTaskTypes.map(t => `<label><input type="checkbox" value="${t}"> ${t}</label>`).join('');
+}
+
+function addNewTaskType() {
+  let val = document.getElementById('customTaskInput').value.trim();
+  if(!val) return alert('Enter a task name!');
+  if(AvailableTaskTypes.includes(val)) return alert('Task type already exists!');
+  AvailableTaskTypes.push(val);
+  save();
+  document.getElementById('customTaskInput').value = '';
+  updateDropdowns();
+  alert('New task type added successfully!');
+}
+
+function addCaller() {
+  let name = document.getElementById('newCallerName').value.trim();
+  if(!name) return alert('Please enter a name!');
+  if(Callers.includes(name)) return alert('Member already exists!');
+  Callers.push(name);
+  save();
+  document.getElementById('newCallerName').value = '';
+  updateDropdowns();
+  render();
+  alert('Team member added successfully!');
+}
+
+function removeCaller(name) {
+  if(Callers.length <= 1) return alert('You must keep at least one member!');
+  if(confirm(`Are you sure you want to remove ${name}?`)) {
+    Callers = Callers.filter(c => c !== name);
+    save();
+    updateDropdowns();
+    render();
+  }
+}
+
+function saveLeadAction() {
+  let editId = document.getElementById('editLeadId').value;
+  let nameInput = document.getElementById('n').value;
+  let phoneInput = document.getElementById('ph').value;
+  if(!nameInput || !phoneInput) return alert('Name and Phone are required!');
+  
+  let selectedServices = [];
+  document.querySelectorAll('#serviceGroup input:checked').forEach(cb => {
+    selectedServices.push(cb.value);
+  });
+  let serviceStr = selectedServices.length > 0 ? selectedServices.join(', ') : 'General Inquiry';
+
+  if(editId) {
+    let l = L.find(x => x.id === editId);
+    if(l) {
+      l.name = nameInput;
+      l.phone = phoneInput;
+      l.city = document.getElementById('city').value;
+      l.source = document.getElementById('src').value;
+      l.service = serviceStr;
+      l.caller = document.getElementById('callerSel').value;
+      l.status = document.getElementById('st').value;
+      l.priority = document.getElementById('pri').value;
+      l.follow = document.getElementById('fu').value;
+      l.amount = +document.getElementById('amt').value || 0;
+      l.notes = document.getElementById('notes').value;
+    }
+    save();
+    resetLeadForm();
+    render();
+    alert('Lead updated successfully!');
+  } else {
+    L.unshift({
+      id: 'TGX-' + String(L.length + 1).padStart(4, '0'),
+      name: nameInput,
+      phone: phoneInput,
+      city: document.getElementById('city').value,
+      source: document.getElementById('src').value,
+      service: serviceStr,
+      caller: document.getElementById('callerSel').value,
+      status: document.getElementById('st').value,
+      priority: document.getElementById('pri').value,
+      follow: document.getElementById('fu').value,
+      amount: +document.getElementById('amt').value || 0,
+      notes: document.getElementById('notes').value,
+      calls: 0,
+      lastCalled: null,
+      date: new Date().toISOString().slice(0, 10)
+    });
+    save();
+    resetLeadForm();
+    render();
+    alert('Lead added successfully!');
+  }
+}
+
+function editLead(id) {
+  let l = L.find(x => x.id === id);
+  if(!l) return;
+  document.getElementById('editLeadId').value = l.id;
+  document.getElementById('n').value = l.name;
+  document.getElementById('ph').value = l.phone;
+  document.getElementById('city').value = l.city || '';
+  document.getElementById('src').value = l.source || 'Meta Ads';
+  document.getElementById('callerSel').value = l.caller || Callers[0];
+  document.getElementById('st').value = l.status;
+  document.getElementById('pri').value = l.priority;
+  document.getElementById('fu').value = l.follow || '';
+  document.getElementById('amt').value = l.amount || '';
+  document.getElementById('notes').value = l.notes || '';
+
+  document.querySelectorAll('#serviceGroup input').forEach(cb => {
+    cb.checked = l.service && l.service.includes(cb.value);
+  });
+
+  document.getElementById('formTitle').innerText = 'Edit Lead: ' + l.id;
+  document.getElementById('saveLeadBtn').innerText = 'Update Lead';
+  document.getElementById('cancelEditBtn').classList.remove('hide');
+  
+  tab('leads', document.querySelector('nav button:nth-child(3)'));
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function deleteLead(id) {
+  if(confirm(`Are you sure you want to delete lead ${id}?`)) {
+    L = L.filter(x => x.id !== id);
+    save();
+    render();
+  }
+}
+
+function resetLeadForm() {
+  document.getElementById('editLeadId').value = '';
+  ['n', 'ph', 'city', 'fu', 'amt', 'notes'].forEach(x => document.getElementById(x).value = '');
+  document.querySelectorAll('#serviceGroup input').forEach(cb => cb.checked = false);
+  document.getElementById('formTitle').innerText = 'Add New Lead';
+  document.getElementById('saveLeadBtn').innerText = 'Add Lead';
+  document.getElementById('cancelEditBtn').classList.add('hide');
+}
+
+function saveTaskAssignment() {
+  let leadId = document.getElementById('taskLeadSel').value;
+  let member = document.getElementById('taskMemberSel').value;
+  let status = document.getElementById('taskStatus').value;
+  let deadline = document.getElementById('taskDeadline').value;
+  let notes = document.getElementById('taskNotes').value;
+
+  let selectedTasks = [];
+  document.querySelectorAll('#taskTypeGroup input:checked').forEach(cb => {
+    selectedTasks.push(cb.value);
+  });
+
+  if(!selectedTasks.length) return alert('Please select at least one task!');
+  if(!leadId) return alert('Please select a lead/client!');
+
+  let leadObj = L.find(x => x.id === leadId);
+  let clientName = leadObj ? leadObj.name : 'Unknown';
+
+  Tasks.unshift({
+    taskId: 'TSK-' + String(Tasks.length + 1).padStart(4, '0'),
+    leadId: leadId,
+    clientName: clientName,
+    member: member,
+    tasks: selectedTasks.join(', '),
+    status: status,
+    deadline: deadline || '-',
+    notes: notes,
+    date: new Date().toISOString().slice(0, 10)
+  });
+
+  save();
+  document.getElementById('taskDeadline').value = '';
+  document.getElementById('taskNotes').value = '';
+  document.querySelectorAll('#taskTypeGroup input').forEach(cb => cb.checked = false);
+  render();
+  alert('Tasks assigned successfully!');
+}
+
+function updateTaskStatus(taskId, newStatus) {
+  let t = Tasks.find(x => x.taskId === taskId);
+  if(t) {
+    t.status = newStatus;
+    save();
+    render();
+  }
+}
+
+function deleteTask(taskId) {
+  if(confirm('Are you sure you want to delete this task assignment?')) {
+    Tasks = Tasks.filter(x => x.taskId !== taskId);
+    save();
+    render();
+  }
+}
+
+function updateLeadStatus(id, newStatus) {
+  let l = L.find(x => x.id === id);
+  if(l) {
+    l.status = newStatus;
+    save();
+    render();
+  }
+}
+
+function saveCallAdmin() {
+  let lidVal = document.getElementById('lid').value.trim();
+  let l = L.find(x => x.id === lidVal);
+  let outVal = document.getElementById('out').value;
+  let durVal = document.getElementById('dur').value;
+  let nfVal = document.getElementById('nf').value;
+  let cnVal = document.getElementById('cn').value;
+  let ccVal = document.getElementById('ccSel').value;
+
+  C.unshift({
+    lead: lidVal,
+    caller: ccVal,
+    date: new Date().toLocaleString(),
+    out: outVal,
+    dur: durVal,
+    next: nfVal,
+    notes: cnVal
+  });
+
+  if(l) {
+    l.calls = (l.calls || 0) + 1;
+    l.lastCalled = new Date().toLocaleString();
+    if(l.status === 'New') {
+      l.status = 'Contacted';
+    }
+    if(nfVal) {
+      l.follow = nfVal;
+      l.status = 'Follow-up';
+    } else if(outVal.includes('Interested')) {
+      l.status = 'Interested';
+    } else if(outVal.includes('Not Interested')) {
+      l.status = 'Not Interested';
+    }
+  }
+  save();
+  document.getElementById('lid').value = '';
+  document.getElementById('dur').value = '';
+  document.getElementById('nf').value = '';
+  document.getElementById('cn').value = '';
+  render();
+  alert('Call log saved!');
+}
+
+function quickLogMetaCall(id) {
+  let l = L.find(x => x.id === id);
+  if(!l) return;
+
+  let callerName = prompt(`Selected Employee/Caller Name:`, l.caller || Callers[0]);
+  if(!callerName) return;
+
+  let outcome = prompt("Enter call outcome (e.g., Connected - Interested, Call Back Later, No Answer):", "Connected - Interested");
+  if(!outcome) return;
+
+  let nextDate = prompt("Next Follow-up Date (YYYY-MM-DD) if applicable (or leave blank):", "");
+  let callNotes = prompt("Enter brief call notes / feedback:", "");
+
+  let nowStr = new Date().toLocaleString();
+
+  C.unshift({
+    lead: id,
+    caller: callerName,
+    date: nowStr,
+    out: outcome,
+    dur: '3',
+    next: nextDate || '',
+    notes: callNotes || ''
+  });
+
+  l.calls = (l.calls || 0) + 1;
+  l.lastCalled = nowStr;
+
+  // Automated Step-by-Step Workflow Progression
+  if(l.status === 'New') {
+    l.status = 'Contacted';
+  }
+
+  if(nextDate) {
+    l.follow = nextDate;
+    l.status = 'Follow-up';
+  } else if(outcome.toLowerCase().includes('interested') && !outcome.toLowerCase().includes('not')) {
+    l.status = 'Interested';
+  } else if(outcome.toLowerCase().includes('not interested')) {
+    l.status = 'Not Interested';
+  }
+
+  save();
+  render();
+  alert(`Call logged successfully! Lead ${l.id} progress updated to: ${l.status}`);
+}
+
+function triggerDirectCall(id, phone) {
+  let l = L.find(x => x.id === id);
+  if(l) {
+    if(l.status === 'New') {
+      l.status = 'Contacted';
+    }
+    l.lastCalled = new Date().toLocaleString();
+    save();
+  }
+  window.location.href = `tel:${phone.replace(/[^0-9+]/g,'')}`;
+  setTimeout(() => render(), 1000);
+}
+
+function tbl(a, isManagement = false) {
+  if(!a.length) return '<p>No records found.</p>';
+  let statuses = ['New', 'Contacted', 'Interested', 'Follow-up', 'Negotiation', 'Converted', 'Not Interested', 'No Response'];
+  
+  return '<table><tr><th>ID</th><th>Name</th><th>Call & WhatsApp</th><th>Service(s)</th><th>Assigned Caller</th><th>Status</th><th>Priority</th><th>Follow-up</th><th>Calls</th>'+(isManagement?'<th>Actions</th>':'')+'</tr>'+
+  a.map(x=>`<tr>
+    <td><b>${x.id}</b></td>
+    <td>${x.name}</td>
+    <td>
+      <a class="call-btn" href="tel:${x.phone.replace(/[^0-9+]/g,'')}" onclick="triggerDirectCall('${x.id}', '${x.phone}')">📞 Call</a>
+      <a class="wa-btn" href="https://wa.me/91${x.phone.replace(/[^0-9]/g,'')}?text=Hello%20${encodeURIComponent(x.name)},%20regarding%20your%20inquiry%20for%20Thegstxpress..." target="_blank">Chat</a>
+    </td>
+    <td><span style="font-size:12px; color:#9ca3af;">${x.service}</span></td>
+    <td><span class="badge">${x.caller}</span></td>
+    <td>
+      <select class="stage-select" onchange="updateLeadStatus('${x.id}', this.value)">
+        ${statuses.map(st=>`<option ${x.status===st?'selected':''}>${st}</option>`).join('')}
+      </select>
+    </td>
+    <td>${x.priority}</td>
+    <td>${x.follow||'-'}</td>
+    <td>${x.calls||0}</td>
+    ${isManagement?`<td>
+      <div class="action-btn-group">
+        <button class="edit-btn" onclick="editLead('${x.id}')">Edit</button>
+        <button class="del-btn" onclick="deleteLead('${x.id}')">Delete</button>
+      </div>
+    </td>`:''}
+  </tr>`).join('')+'</table>';
+}
+
+function renderMetaLeads() {
+  let callerFilter = document.getElementById('metaCallerFilter')?.value || 'All';
+  let stageFilter = document.getElementById('metaStageFilter')?.value || 'All';
+  let searchQuery = (document.getElementById('metaSearch')?.value || '').toLowerCase();
+
+  let metaLeads = L.filter(x => (x.source === 'Meta Ads' || !x.source));
+
+  if(callerFilter !== 'All') {
+    metaLeads = metaLeads.filter(x => x.caller === callerFilter);
+  }
+  if(stageFilter !== 'All') {
+    metaLeads = metaLeads.filter(x => x.status === stageFilter);
+  }
+  if(searchQuery) {
+    metaLeads = metaLeads.filter(x => (x.name + x.phone + (x.city||'')).toLowerCase().includes(searchQuery));
+  }
+
+  let container = document.getElementById('metaLeadsTable');
+  if(!metaLeads.length) {
+    container.innerHTML = '<p>No Meta leads found matching filter.</p>';
+    return;
+  }
+
+  let statuses = ['New', 'Contacted', 'Interested', 'Follow-up', 'Negotiation', 'Converted', 'Not Interested', 'No Response'];
+
+  container.innerHTML = '<table><tr><th>Lead ID</th><th>Name</th><th>Direct Call Action</th><th>Assigned Employee</th><th>Workflow Stage</th><th>Total Calls</th><th>Last Called Date</th><th>Log & Progress</th></tr>'+
+  metaLeads.map(x=>`<tr>
+    <td><b>${x.id}</b> <span class="meta-badge">Meta</span></td>
+    <td><b>${x.name}</b><br><span style="font-size:11px; color:#9ca3af;">${x.service}</span></td>
+    <td>
+      <a class="call-btn" href="tel:${x.phone.replace(/[^0-9+]/g,'')}" onclick="triggerDirectCall('${x.id}', '${x.phone}')">📞 Call ${x.phone}</a>
+      <a class="wa-btn" href="https://wa.me/91${x.phone.replace(/[^0-9]/g,'')}?text=Hello%20${encodeURIComponent(x.name)},%20regarding%20your%20Meta%20inquiry%20for%20Thegstxpress..." target="_blank">WhatsApp</a>
+    </td>
+    <td><span class="badge">${x.caller}</span></td>
+    <td>
+      <select class="stage-select" onchange="updateLeadStatus('${x.id}', this.value)">
+        ${statuses.map(st=>`<option ${x.status===st?'selected':''}>${st}</option>`).join('')}
+      </select>
+    </td>
+    <td><b>${x.calls||0} call(s)</b></td>
+    <td><span style="font-size:12px; color:${x.lastCalled?'#34d399':'#f87171'};">${x.lastCalled || 'Never Called ❌'}</span></td>
+    <td>
+      <button class="primary" style="padding:5px 10px;font-size:12px; background:linear-gradient(135deg, #1877f2 0%, #0052cc 100%);" onclick="quickLogMetaCall('${x.id}')">Log & Step Update 📝</button>
+    </td>
+  </tr>`).join('')+'</table>';
+}
+
+function renderLeads() {
+  let s = (document.getElementById('q')?.value || '').toLowerCase();
+  document.getElementById('lt').innerHTML = tbl(L.filter(x=>(x.name+x.phone+x.city+x.caller+x.service).toLowerCase().includes(s)), true);
+}
+
+function renderMonthlyRevenue() {
+  let revMap = {};
+  L.forEach(x => {
+    if(x.date && x.amount > 0) {
+      let monthKey = x.date.slice(0, 7);
+      revMap[monthKey] = (revMap[monthKey] || 0) + Number(x.amount);
+    }
+  });
+
+  let sortedMonths = Object.keys(revMap).sort().reverse();
+  let container = document.getElementById('monthlyRevenueTable');
+
+  if(!sortedMonths.length) {
+    container.innerHTML = '<p>No revenue records found yet.</p>';
+    return;
+  }
+
+  container.innerHTML = '<table><tr><th>Month</th><th>Total Revenue</th></tr>' +
+    sortedMonths.map(m => `<tr><td><b>${m}</b></td><td><span style="font-weight:700; color:#34d399;">₹${revMap[m].toLocaleString('en-IN')}</span></td></tr>`).join('') +
+    '</table>';
+}
+
+function renderTasksTable() {
+  let container = document.getElementById('taskListTable');
+  if(!Tasks.length) {
+    container.innerHTML = '<p>No tasks assigned yet.</p>';
+    return;
+  }
+  let taskStatuses = ['Pending', 'In Progress', 'Completed', 'On Hold'];
+
+  container.innerHTML = '<table><tr><th>Task ID</th><th>Client</th><th>Assigned Member</th><th>Assigned Tasks</th><th>Status</th><th>Deadline</th><th>Action</th></tr>'+
+  Tasks.map(t=>`<tr>
+    <td><b>${t.taskId}</b></td>
+    <td>${t.clientName} (${t.leadId})</td>
+    <td><span class="badge">${t.member}</span></td>
+    <td><span style="font-size:12px; font-weight:600; color:#9ca3af;">${t.tasks}</span></td>
+    <td>
+      <select class="stage-select" onchange="updateTaskStatus('${t.taskId}', this.value)">
+        ${taskStatuses.map(st=>`<option ${t.status===st?'selected':''}>${st}</option>`).join('')}
+      </select>
+    </td>
+    <td>${t.deadline}</td>
+    <td><button onclick="deleteTask('${t.taskId}')" class="del-btn">Delete</button></td>
+  </tr>`).join('')+'</table>';
+}
+
+function renderCallerLeads() {
+  let activeCaller = document.getElementById('portalCaller').value;
+  let filterVal = document.getElementById('portalFilter').value;
+  let today = new Date().toISOString().slice(0, 10);
+  
+  let assignedLeads = L.filter(x => x.caller === activeCaller);
+  if(filterVal === 'New') assignedLeads = assignedLeads.filter(x => x.status === 'New');
+  if(filterVal === 'Follow-up') assignedLeads = assignedLeads.filter(x => x.follow && x.follow <= today && x.status !== 'Converted');
+  if(filterVal === 'Interested') assignedLeads = assignedLeads.filter(x => x.status === 'Interested');
+
+  let container = document.getElementById('callerLeadsTable');
+  if(!assignedLeads.length) {
+    container.innerHTML = '<p>No leads assigned to this caller matching filter.</p>';
+    return;
+  }
+
+  let statuses = ['New', 'Contacted', 'Interested', 'Follow-up', 'Negotiation', 'Converted', 'Not Interested', 'No Response'];
+
+  container.innerHTML = '<table><tr><th>ID</th><th>Name</th><th>Phone / WhatsApp</th><th>Service(s)</th><th>Status</th><th>Priority</th><th>Follow-up</th><th>Action</th></tr>'+
+  assignedLeads.map(x=>`<tr>
+    <td><b>${x.id}</b></td>
+    <td>${x.name}</td>
+    <td>
+      <a class="call-btn" href="tel:${x.phone.replace(/[^0-9+]/g,'')}" onclick="triggerDirectCall('${x.id}', '${x.phone}')">📞 Call</a>
+      <a class="wa-btn" href="https://wa.me/91${x.phone.replace(/[^0-9]/g,'')}?text=Hello%20${encodeURIComponent(x.name)},%20regarding%20your%20inquiry%20for%20Thegstxpress..." target="_blank">Chat</a>
+    </td>
+    <td><span style="font-size:12px; color:#9ca3af;">${x.service}</span></td>
+    <td>
+      <select class="stage-select" onchange="updateLeadStatus('${x.id}', this.value)">
+        ${statuses.map(st=>`<option ${x.status===st?'selected':''}>${st}</option>`).join('')}
+      </select>
+    </td>
+    <td>${x.priority}</td>
+    <td>${x.follow||'-'}</td>
+    <td><button class="primary" style="padding:5px 10px;font-size:12px;" onclick="quickLogMetaCall('${x.id}')">Log Call 📞</button></td>
+  </tr>`).join('')+'</table>';
+}
+
+function render() {
+  updateDropdowns();
+  let total = L.length, co = L.filter(x => x.status === 'Converted').length, today = new Date().toISOString().slice(0, 10);
+  
+  document.getElementById('cards').innerHTML = [
+    ['Total Leads', total],
+    ['Meta Ads Leads', L.filter(x => x.source === 'Meta Ads' || !x.source).length],
+    ['New', L.filter(x => x.status === 'New').length],
+    ['Interested', L.filter(x => x.status === 'Interested').length],
+    ['Follow-ups', L.filter(x => x.follow && x.follow <= today && x.status !== 'Converted').length],
+    ['Converted', co],
+    ['Conv. %', total ? (co / total * 100).toFixed(1) + '%' : '0%'],
+    ['Revenue', '₹' + L.reduce((a, x) => a + (x.amount || 0), 0).toLocaleString('en-IN')]
+  ].map(x => `<div class="card">${x[0]}<b>${x[1]}</b></div>`).join('');
+  
+  renderMonthlyRevenue();
+  document.getElementById('recent').innerHTML = tbl(L.slice(0, 8), false);
+  renderMetaLeads();
+  renderLeads();
+  renderTasksTable();
+  renderCallerLeads();
+  
+  document.getElementById('ct').innerHTML = C.length ? '<table><tr><th>Lead ID</th><th>Employee / Caller</th><th>Date & Time</th><th>Outcome</th><th>Duration</th><th>Next Follow-up</th><th>Notes</th></tr>'+
+  C.map(x=>`<tr><td><b>${x.lead}</b></td><td><span class="badge">${x.caller}</span></td><td>${x.date}</td><td>${x.out}</td><td>${x.dur||0} min</td><td>${x.next||'-'}</td><td>${x.notes||''}</td></tr>`).join('')+'</table>' : '<p>No calls recorded yet.</p>';
+  
+  document.getElementById('ft').innerHTML = tbl(L.filter(x => x.follow && x.follow <= today && x.status !== 'Converted'), false);
+  
+  document.getElementById('pt').innerHTML = '<table><tr><th>Employee Name</th><th>Assigned Leads</th><th>Calls Made</th><th>Interested</th><th>Converted</th><th>Conversion Rate</th></tr>'+
+  Callers.map(c => {
+    let a = L.filter(x => x.caller === c), v = a.filter(x => x.status === 'Converted').length;
+    return `<tr><td><b>${c}</b></td><td>${a.length}</td><td>${a.reduce((s, x) => s + (x.calls || 0), 0)}</td><td>${a.filter(x => x.status === 'Interested').length}</td><td>${v}</td><td><b>${a.length ? (v / a.length * 100).toFixed(1) : 0}%</b></td></tr>`;
+  }).join('')+'</table>';
+
+  document.getElementById('callerListTable').innerHTML = '<table><tr><th>Member Name</th><th>Action</th></tr>'+
+  Callers.map(c => `<tr><td><b>${c}</b></td><td><button onclick="removeCaller('${c}')" class="del-btn">Remove</button></div></td></tr>`).join('')+'</table>';
+}
+
+render();
+</script>
+</body>
+</html>
