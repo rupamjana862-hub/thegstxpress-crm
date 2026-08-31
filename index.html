@@ -1,43 +1,6 @@
 <!doctype html>
 <html>
 <head>
-  <!-- Firebase SDK Imports -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getFirestore, collection, getDocs, setDoc, doc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-  // Apnar Firebase Console theke pawa Config Object
-  const firebaseConfig = {
-    apiKey: "AIzaSyAZKGifYNaPrKXb-wMg_vNvpLi3BoDueVQ",
-    authDomain: "thegstxpresscrm.firebaseapp.com",
-    projectId: "thegstxpresscrm",
-    storageBucket: "thegstxpresscrm.firebasestorage.app",
-    messagingSenderId: "1049995780326",
-    appId: "1:1049995780326:web:f53ec6a94b839c2424db27",
-    measurementId: "G-8Y77LVVRFD"
-  };
-
-  // Initialize Firebase & Firestore
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-  window.db = db; // Global access er jonno
-</script>
-  <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-    const firebaseConfig = {
-    apiKey: "AIzaSyAZKGifYNaPrKXb-wMg_vNvpLi3BoDueVQ",
-    authDomain: "thegstxpresscrm.firebaseapp.com",
-    projectId: "thegstxpresscrm",
-    storageBucket: "thegstxpresscrm.firebasestorage.app",
-    messagingSenderId: "1049995780326",
-    appId: "1:1049995780326:web:f53ec6a94b839c2424db27",
-    measurementId: "G-8Y77LVVRFD"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Thegstxpress CRM by Rupam</title>
@@ -317,6 +280,62 @@ h2, h3 {color:#fff;}
 
 </main>
 
+<!-- Firebase Cloud Firestore Integration Script -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAZKGifYNaPrKXb-wMg_vNvpLi3BoDueVQ",
+    authDomain: "thegstxpresscrm.firebaseapp.com",
+    projectId: "thegstxpresscrm",
+    storageBucket: "thegstxpresscrm.firebasestorage.app",
+    messagingSenderId: "1049995780326",
+    appId: "1:1049995780326:web:f53ec6a94b839c2424db27",
+    measurementId: "G-8Y77LVVRFD"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // Global App State Arrays
+  window.L = [];
+  window.C = [];
+  window.Callers = ["Saheli Deb", "Rupam Jana"];
+  window.Tasks = [];
+  window.AvailableTaskTypes = ["Seller Account Opening", "Listing", "Image Generation", "GST Registration", "APOB Registration", "Cataloging", "A+ Content Design"];
+
+  // Real-time synchronization listener with Firestore database
+  onSnapshot(doc(db, "crm_data", "main_store"), (docSnap) => {
+    if (docSnap.exists()) {
+      let data = docSnap.data();
+      window.L = data.leads || [];
+      window.C = data.calls || [];
+      window.Callers = data.callers || ["Saheli Deb", "Rupam Jana"];
+      window.Tasks = data.tasks || [];
+      window.AvailableTaskTypes = data.taskTypes || window.AvailableTaskTypes;
+    } else {
+      save(); // Initialize database if empty
+    }
+    if (typeof render === 'function') render();
+  });
+
+  // Save function updates Firestore cloud store directly
+  window.save = async function() {
+    try {
+      await setDoc(doc(db, "crm_data", "main_store"), {
+        leads: window.L,
+        calls: window.C,
+        callers: window.Callers,
+        tasks: window.Tasks,
+        taskTypes: window.AvailableTaskTypes
+      });
+    } catch (err) {
+      console.error("Firestore Save Error: ", err);
+    }
+  };
+</script>
+
 <script>
 const MASTER_PASSWORD = "1234";
 
@@ -324,7 +343,7 @@ function verifyPassword() {
   let val = document.getElementById('passInput').value;
   if(val === MASTER_PASSWORD) {
     document.getElementById('authScreen').style.display = 'none';
-    localStorage.setItem('tgxAuth', 'true');
+    sessionStorage.tgxAuth = "true";
   } else {
     alert('Incorrect Password! Try again.');
     document.getElementById('passInput').value = '';
@@ -332,23 +351,9 @@ function verifyPassword() {
 }
 
 window.onload = function() {
-  if(localStorage.getItem('tgxAuth') === "true") {
+  if(sessionStorage.tgxAuth === "true") {
     document.getElementById('authScreen').style.display = 'none';
   }
-};
-
-let L = JSON.parse(localStorage.tgxL || '[]');
-let C = JSON.parse(localStorage.tgxC || '[]');
-let Callers = JSON.parse(localStorage.tgxCallers || '["Saheli Deb", "Rupam Jana"]');
-let Tasks = JSON.parse(localStorage.tgxTasks || '[]');
-let AvailableTaskTypes = JSON.parse(localStorage.tgxTaskTypes || '["Seller Account Opening", "Listing", "Image Generation", "GST Registration", "APOB Registration", "Cataloging", "A+ Content Design"]');
-
-const save = () => {
-  localStorage.tgxL = JSON.stringify(L);
-  localStorage.tgxC = JSON.stringify(C);
-  localStorage.tgxCallers = JSON.stringify(Callers);
-  localStorage.tgxTasks = JSON.stringify(Tasks);
-  localStorage.tgxTaskTypes = JSON.stringify(AvailableTaskTypes);
 };
 
 function tab(id, b) {
@@ -878,30 +883,6 @@ function render() {
   document.getElementById('callerListTable').innerHTML = '<table><tr><th>Member Name</th><th>Action</th></tr>'+
   Callers.map(c => `<tr><td><b>${c}</b></td><td><button onclick="removeCaller('${c}')" class="del-btn">Remove</button></div></td></tr>`).join('')+'</table>';
 }
-
-render();
-  <script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
-
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyAZKGifYNaPrKXb-wMg_vNvpLi3BoDueVQ",
-    authDomain: "thegstxpresscrm.firebaseapp.com",
-    projectId: "thegstxpresscrm",
-    storageBucket: "thegstxpresscrm.firebasestorage.app",
-    messagingSenderId: "1049995780326",
-    appId: "1:1049995780326:web:f53ec6a94b839c2424db27",
-    measurementId: "G-8Y77LVVRFD"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
 </script>
 </body>
 </html>
