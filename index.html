@@ -1,6 +1,27 @@
 <!doctype html>
 <html>
 <head>
+  <!-- Firebase SDK Imports -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getFirestore, collection, getDocs, setDoc, doc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+  // Apnar Firebase Console theke pawa Config Object
+  const firebaseConfig = {
+    apiKey: "AIzaSyAZKGifYNaPrKXb-wMg_vNvpLi3BoDueVQ",
+    authDomain: "thegstxpresscrm.firebaseapp.com",
+    projectId: "thegstxpresscrm",
+    storageBucket: "thegstxpresscrm.firebasestorage.app",
+    messagingSenderId: "1049995780326",
+    appId: "1:1049995780326:web:f53ec6a94b839c2424db27",
+    measurementId: "G-8Y77LVVRFD"
+  };
+
+  // Initialize Firebase & Firestore
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  window.db = db; // Global access er jonno
+</script>
   <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
   import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
