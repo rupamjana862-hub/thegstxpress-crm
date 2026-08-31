@@ -846,21 +846,21 @@ function render() {
 render();
   <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
-  import { getFirestore, collection, addDoc, getDocs, doc, setDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+  import { getFirestore } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
   const firebaseConfig = {
-    apiKey: "AIzaSyAZKGifYNaPrKXb-wmG_vNvPLi3BoDueVQ",
+    apiKey: "AIzaSyAZKGifYNaPrKXb-wMg_vNvpLi3BoDueVQ",
     authDomain: "thegstxpresscrm.firebaseapp.com",
     projectId: "thegstxpresscrm",
     storageBucket: "thegstxpresscrm.firebasestorage.app",
-    messagingSenderId: "104995780326",
+    messagingSenderId: "1049995780326",
     appId: "1:104995780326:web:f53ec6a94b839c2424db27",
     measurementId: "G-8Y77LVVRFD"
   };
 
   const app = initializeApp(firebaseConfig);
   window.db = getFirestore(app);
-  console.log("Firebase Connected Successfully!");
+  console.log("Firebase Database Connected!");
 </script>
 </body>
 </html>
