@@ -1,6 +1,22 @@
 <!doctype html>
 <html>
 <head>
+  <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    const firebaseConfig = {
+    apiKey: "AIzaSyAZKGifYNaPrKXb-wMg_vNvpLi3BoDueVQ",
+    authDomain: "thegstxpresscrm.firebaseapp.com",
+    projectId: "thegstxpresscrm",
+    storageBucket: "thegstxpresscrm.firebasestorage.app",
+    messagingSenderId: "1049995780326",
+    appId: "1:1049995780326:web:f53ec6a94b839c2424db27",
+    measurementId: "G-8Y77LVVRFD"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Thegstxpress CRM by Rupam</title>
